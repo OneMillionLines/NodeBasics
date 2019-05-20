@@ -1,7 +1,11 @@
 'use strict';
 
+
 const fs=require('fs')
 const http = require('http')
+var request = require("request");
+
+
 fs.readFile('input.csv','utf-8',  (err,data) => {
         if (err) throw err;
         let input=data.split('\n')
@@ -10,122 +14,61 @@ fs.readFile('input.csv','utf-8',  (err,data) => {
             let my_req=req_string.split(',')
             switch(my_req[0]){
                 case "Get":
-                
-                let url='http://localhost:3028/'+my_req[1]
-                http.get(url,(res)=>{
-                    
-                    res.setEncoding('utf-8');
-                    let rawData=''
-                    res.on('data',(chunk)=>{
-                        rawData+=chunk;
-                    });
-                    res.on('end',()=>{
-                        try{
-                            console.log(rawData);
-                            
-                        }
-                        catch(e){
-                            console.error(e.message);
-                        }
-                    });
-                }).on('error',(e)=>{
-                    console.error(`Got Error: ${e.message}`)
-                });
+                  console.log("Get")
 
-                break;
+                  // let url='http://localhost:3028/'+my_req[1]
+                  // http.get(url,(res)=>{
+                      
+                  //     res.setEncoding('utf-8');
+                  //     let rawData=''
+                  //     res.on('data',(chunk)=>{
+                  //         rawData+=chunk;
+                  //     });
+                  //     res.on('end',()=>{
+                  //         try{
+                  //             console.log(rawData);
+                              
+                  //         }
+                  //         catch(e){
+                  //             console.error(e.message);
+                  //         }
+                  //     });
+                  // }).on('error',(e)=>{
+                  //     console.error(`Got Error: ${e.message}`)
+                  // });
+
+                  break;
                 case "Put": 
-                    var options = {
-                        "method": "PUT",
-                        "hostname":"localhost",
-                          "port": "3028",
-                          "headers": {
-                            "Content-Type": "application/json",
-                            "cache-control": "no-cache",
-                          }
-                        };
+                  console.log("PUT")
 
-                    var req = http.request(options, function (res) {
-                        var chunks = [];
-
-                          res.on("data", function (chunk) {
-                            chunks.push(chunk);
-                          });
-
-                          res.on("end", function () {
-                            var body = Buffer.concat(chunks);
-                            console.log(body.toString());
-                          });
-                        });
-
-                    req.write(JSON.stringify({ my_req[1]: my_req[2] }));
-                    req.end();
-                
-                break;
+                  
+                  break;
                 case "Post": 
+                  console.log("POST")
+                  var options = { method: 'POST',
+                    url: 'http://localhost:3028/',
+                    headers: 
+                    { 'cache-control': 'no-cache',
+                      Connection: 'keep-alive',
+                      'content-length': '20',
+                      'accept-encoding': 'gzip, deflate',
+                      Host: 'localhost:3028',
+                      'Cache-Control': 'no-cache',
+                      Accept: '*/*',
+                      'User-Agent': 'aslam',
+                      'Content-Type': 'application/x-www-form-urlencoded' },
+                    form: { name: my_req[1], cost: my_req[2] } };
 
-                    var options = {
-                      "method": "POST",
-                      "hostname": "localhost",
-                      "port": "3028",
-                      "headers": {
-                        "Content-Type": "text/plain",
-                        
-                        "Accept": "*/*",
-                        "Host": "localhost:3028",
-                       
-                        "content-length": "2",
-                        "Connection": "keep-alive",
-                        "cache-control": "no-cache"
-                      }
-                    };
+                  request(options, function (error, response, body) {
+                    if (error) throw new Error(error);
 
-                    var req = http.request(options, function (res) {
-                      var chunks = [];
-
-                      res.on("data", function (chunk) {
-                        chunks.push(chunk);
-                      });
-
-                      res.on("end", function () {
-                        var body = Buffer.concat(chunks);
-                        console.log(body.toString());
-                      });
-                    });
-
-                    req.write(JSON.stringify({ my_req[1]: my_req[2] }));
-                    req.end();
-                    console.log(my_req[1],my_req[2]);
-                    break;
-
+                    console.log(body);
+                  });
+                  console.log(my_req[1],my_req[2]);
+                  break;
                 case "Delete": 
-                    
-                    var options = {
-                      "method": "DELETE",
-                      "hostname":"localhost",
-                      "port": "3028",
-                      "headers": {
-                        "Content-Type": "text/plain",
-                        "cache-control": "no-cache",
-                        "Postman-Token": "d79207fe-f47c-4ca4-b73e-017d97211b3a"
-                      }
-                    };
-
-                    var req = http.request(options, function (res) {
-                      var chunks = [];
-
-                      res.on("data", function (chunk) {
-                        chunks.push(chunk);
-                      });
-
-                      res.on("end", function () {
-                        var body = Buffer.concat(chunks);
-                        console.log(body.toString());
-                      });
-                    });
-
-                    req.write(my_req[1]);
-                    req.end();
-                    break;
+                  console.log("delete")
+                  break;
             }
         }
         console.log('The file has been read!');

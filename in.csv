@@ -1,0 +1,7 @@
+action,name,cost
+Post,banana,10
+Put,banana,50
+Delete,banana,
+Post,apple,100
+Put,apple,90
+Delete,apple,
