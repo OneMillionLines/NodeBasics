@@ -1,0 +1,9 @@
+Method,product_id,Value
+Post,banana,10
+Get,banana,
+Put,banana,50
+Delete,banana,
+Post,apple,100
+Get,apple,
+Put,apple,90
+Delete,apple,
